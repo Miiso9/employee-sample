@@ -15,12 +15,10 @@ return new class extends Migration
             $table->integer('emp_no');
             $table->string('title', 50);
             $table->date('from_date');
-            $table->date('to_date')->nullable(); // Nullable to_date
+            $table->date('to_date')->nullable();
 
-            // Composite primary key
             $table->primary(['emp_no', 'title', 'from_date']);
 
-            // Foreign key
             $table->foreign('emp_no')
                 ->references('emp_no')
                 ->on('employees')

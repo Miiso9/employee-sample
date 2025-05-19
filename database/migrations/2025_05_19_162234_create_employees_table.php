@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('employees', function (Blueprint $table) {
-            $table->integer('emp_no')->primary(); // Non-auto-incrementing PK
+            $table->integer('emp_no')->primary();
             $table->date('birth_date');
             $table->string('first_name', 14);
             $table->string('last_name', 16);

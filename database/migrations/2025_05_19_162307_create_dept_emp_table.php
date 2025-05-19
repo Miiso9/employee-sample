@@ -17,10 +17,8 @@ return new class extends Migration
             $table->date('from_date');
             $table->date('to_date');
 
-            // Composite primary key
             $table->primary(['emp_no', 'dept_no']);
 
-            // Foreign keys with cascade
             $table->foreign('emp_no')
                 ->references('emp_no')
                 ->on('employees')
