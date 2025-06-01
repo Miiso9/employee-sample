@@ -5,12 +5,17 @@ use App\Http\Controllers\DeptEmpController;
 use App\Http\Controllers\DeptManagerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\SalaryController;
+use App\Http\Controllers\Socialite\ProviderCallbackController;
+use App\Http\Controllers\Socialite\ProviderRedirectController;
 use App\Http\Controllers\TitleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/auth/{provider}/redirect', ProviderRedirectController::class)->name('auth.redirect');
+Route::get('/auth/{provider}/callback', ProviderCallbackController::class)->name('auth.callback');
 
 Route::resource('employees', EmployeeController::class);
 Route::apiResource('departments', DepartmentController::class);
