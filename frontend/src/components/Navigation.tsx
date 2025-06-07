@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import {UserMenu} from "./UserMenu.tsx";
 
 export const Navigation = () => {
     const { pathname } = useLocation()
@@ -29,6 +30,7 @@ export const Navigation = () => {
                             </Link>
                         ))}
                     </div>
+                    <UserMenu />
                 </div>
             </div>
         </nav>
