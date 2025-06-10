@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\SalaryController;
+use App\Http\Controllers\TitleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,5 +37,11 @@ Route::get('/salaries/{emp_no}/{from_date}', [SalaryController::class, 'show']);
 Route::put('/salaries/{emp_no}/{from_date}', [SalaryController::class, 'update']);
 Route::delete('/salaries/{emp_no}/{from_date}', [SalaryController::class, 'destroy']);
 
+
+Route::get('/titles', [TitleController::class, 'index']);
+Route::post('/titles', [TitleController::class, 'store']);
+Route::get('/titles/{emp_no}', [TitleController::class, 'show']);
+Route::put('/titles/{emp_no}', [TitleController::class, 'update']);
+ Route::delete('/titles/{emp_no}', [TitleController::class, 'destroy']);
 
 

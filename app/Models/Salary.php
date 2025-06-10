@@ -9,7 +9,6 @@ class   Salary extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = ['emp_no', 'from_date'];
     public $incrementing = false;
     public $timestamps = false;
 

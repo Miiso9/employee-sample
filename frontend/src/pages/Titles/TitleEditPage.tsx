@@ -5,45 +5,45 @@ import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import axios from '../../lib/axios';
 
-type Salary = {
+type Title = {
     emp_no: number;
-    salary: number;
+    title: string;
     from_date: string;
-    to_date: string;
+    to_date: string | null;
     employee: {
         first_name: string;
         last_name: string;
     };
 };
 
-export default function SalaryEditPage() {
-    const { emp_no, from_date } = useParams<{ emp_no: string; from_date: string }>();
-    const [salary, setSalary] = useState<Salary | null>(null);
-    const [form, setForm] = useState<{ salary?: string; to_date?: string }>({});
+export default function TitleEditPage() {
+    const { emp_no, title, from_date } = useParams<{ emp_no: string; title: string; from_date: string }>();
+    const [record, setRecord] = useState<Title | null>(null);
+    const [form, setForm] = useState<Partial<Title>>({});
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchSalary = async () => {
+        const fetchTitle = async () => {
             try {
-                const response = await axios.get(`/salaries/${emp_no}/${from_date}`);
-                setSalary(response.data);
+                const response = await axios.get(`/titles/${emp_no}`);
+                const match = response.data.find((t: Title) => t.title === title && t.from_date === from_date);
+                setRecord(match);
                 setForm({
-                    salary: response.data.salary.toString(),
-                    to_date: response.data.to_date,
+                    to_date: match?.to_date || '',
                 });
             } catch (error) {
-                console.error('Failed to fetch salary:', error);
+                console.error('Failed to fetch title:', error);
             } finally {
                 setLoading(false);
             }
         };
 
-        if (emp_no && from_date) fetchSalary();
-    }, [emp_no, from_date]);
+        if (emp_no && title && from_date) fetchTitle();
+    }, [emp_no, title, from_date]);
 
-    const handleChange = (field: keyof typeof form, value: string) => {
+    const handleChange = (field: keyof Title, value: string) => {
         setForm(prev => ({ ...prev, [field]: value }));
     };
 
@@ -52,11 +52,12 @@ export default function SalaryEditPage() {
         setSaving(true);
 
         try {
-            await axios.put(`/salaries/${emp_no}/${from_date}`, {
-                salary: parseInt(form.salary || '0'),
+            await axios.put(`/titles/${emp_no}`, {
+                title,
+                from_date,
                 to_date: form.to_date || null,
             });
-            navigate('/salaries');
+            navigate('/titles');
         } catch (error) {
             console.error('Update failed:', error);
         } finally {
@@ -77,27 +78,20 @@ export default function SalaryEditPage() {
             <div className="bg-white rounded-xl shadow-lg p-6">
                 <div className="flex justify-between items-start mb-6">
                     <div>
-                        <Link to="/salaries" className="text-blue-600 hover:text-blue-800 flex items-center">
+                        <Link to="/titles" className="text-blue-600 hover:text-blue-800 flex items-center">
                             <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                             </svg>
-                            Back to Salaries
+                            Back to Titles
                         </Link>
                         <h1 className="text-2xl font-bold text-slate-800 mt-4">
-                            Edit Salary for {salary?.employee?.first_name} {salary?.employee?.last_name}
+                            Edit Title for {record?.employee?.first_name} {record?.employee?.last_name}
                         </h1>
                     </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <Input
-                            id="salary"
-                            label="Salary"
-                            type="number"
-                            value={form.salary || ''}
-                            onChange={(val) => handleChange('salary', val)}
-                        />
                         <Input
                             id="to_date"
                             label="To Date"
@@ -110,7 +104,7 @@ export default function SalaryEditPage() {
                     <div className="flex justify-end space-x-3 pt-4">
                         <Button
                             type="button"
-                            onClick={() => navigate('/salaries')}
+                            onClick={() => navigate('/titles')}
                             className="bg-gray-200 text-gray-800 hover:bg-gray-300"
                         >
                             Cancel

@@ -5,14 +5,15 @@ import EmployeesPage from '../pages/Employees/EmployeesPage.tsx';
 import EmployeeDetailPage from '../pages/Employees/EmployeeDetailPage.tsx';
 import DepartmentsPage from '../pages/Departments/DepartmentsPage.tsx';
 import SalariesPage from '../pages/Salaries/SalariesPage.tsx';
-import TitlesPage from '../pages/TitlesPage';
+import TitlesPage from '../pages/Titles/TitlesPage.tsx';
 import SocialLoginSuccess from '../pages/SocialLoginSuccess';
 import ProtectedRoute from './ProtectedRoute';
 import EmployeeEditPage from "../pages/Employees/EmployeeEditPage.tsx";
 import DepartmentEditPage from "../pages/Departments/DepartmentEditPage.tsx";
 import SalaryEditPage from "../pages/Salaries/SalaryEditPage.tsx";
 import SalaryDetailPage from "../pages/Salaries/SalaryDetailPage.tsx";
-
+import TitleDetailPage from "../pages/Titles/TitleDetailPage.tsx";
+import TitleEditPage from "../pages/Titles/TitleEditPage.tsx";
 export const routes: RouteObject[] = [
     {
         path: '/',
@@ -99,6 +100,22 @@ export const routes: RouteObject[] = [
         element: (
             <ProtectedRoute>
                 <TitlesPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/titles/:emp_no',
+        element: (
+            <ProtectedRoute>
+                <TitleDetailPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/titles/edit/:emp_no/:title/:from_date',
+        element: (
+            <ProtectedRoute>
+                <TitleEditPage />
             </ProtectedRoute>
         ),
     },

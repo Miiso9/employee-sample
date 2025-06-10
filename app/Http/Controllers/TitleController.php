@@ -12,15 +12,20 @@ class TitleController extends Controller
      */
     public function index()
     {
-        return Title::with('employee')->get();
-    }
+        $titles = Title::with('employee')->get()->map(function ($title) {
+            return [
+                'emp_no' => $title->emp_no,
+                'title' => $title->title,
+                'from_date' => $title->from_date,
+                'to_date' => $title->to_date,
+                'employee' => [
+                    'first_name' => $title->employee->first_name ?? null,
+                    'last_name' => $title->employee->last_name ?? null,
+                ],
+            ];
+        });
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return response()->json($titles);
     }
 
     /**
@@ -28,51 +33,79 @@ class TitleController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'emp_no' => 'required|exists:employees,emp_no',
             'title' => 'required|string|max:50',
             'from_date' => 'required|date',
             'to_date' => 'nullable|date|after:from_date'
         ]);
 
-        return Title::create($request->all());
+        $title = Title::create($validated);
+
+        return response()->json($title, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Title $title)
+    public function show($emp_no)
     {
-        return $title->load('employee');
-    }
+        $titles = Title::where('emp_no', $emp_no)->with('employee')->get()->map(function ($title) {
+            return [
+                'emp_no' => $title->emp_no,
+                'title' => $title->title,
+                'from_date' => $title->from_date,
+                'to_date' => $title->to_date,
+                'employee' => [
+                    'first_name' => $title->employee->first_name ?? null,
+                    'last_name' => $title->employee->last_name ?? null,
+                ],
+            ];
+        });
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return response()->json($titles);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Title $title)
+    public function update(Request $request, $emp_no)
     {
-        $request->validate([
+        $validated = $request->validate([
+            'title' => 'required|string|max:50',
+            'from_date' => 'required|date',
             'to_date' => 'nullable|date|after:from_date'
         ]);
 
-        $title->update($request->all());
-        return $title;
+        $title = Title::where('emp_no', $emp_no)
+            ->where('title', $validated['title'])
+            ->where('from_date', $validated['from_date'])
+            ->firstOrFail();
+
+        $title->update([
+            'to_date' => $validated['to_date']
+        ]);
+
+        return response()->json($title);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Title $title)
+    public function destroy($emp_no, Request $request)
     {
+        $request->validate([
+            'title' => 'required|string',
+            'from_date' => 'required|date'
+        ]);
+
+        $title = Title::where('emp_no', $emp_no)
+            ->where('title', $request->title)
+            ->where('from_date', $request->from_date)
+            ->firstOrFail();
+
         $title->delete();
-        return response()->noContent();
+
+        return response()->json(['message' => 'Title deleted']);
     }
 }
