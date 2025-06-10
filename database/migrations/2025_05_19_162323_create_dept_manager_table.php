@@ -28,6 +28,7 @@ return new class extends Migration
                 ->references('dept_no')
                 ->on('departments')
                 ->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

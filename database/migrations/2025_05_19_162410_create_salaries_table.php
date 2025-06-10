@@ -23,6 +23,7 @@ return new class extends Migration
                 ->references('emp_no')
                 ->on('employees')
                 ->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

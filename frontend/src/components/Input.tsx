@@ -21,7 +21,7 @@ export const Input = ({
                           error,
                           autoFocus = false,
                           icon,
-                          placeholder
+                          placeholder,
                       }: InputProps) => {
     const [isFocused, setIsFocused] = useState(false)
 
@@ -43,6 +43,7 @@ export const Input = ({
                     autoFocus={autoFocus}
                     className={`w-full pt-6 pb-2 ${icon ? 'pl-8' : 'pl-0'} pr-4 bg-transparent outline-none text-slate-700 placeholder-transparent peer`}
                     placeholder={placeholder || label}
+                    required
                 />
                 <label
                     htmlFor={id}

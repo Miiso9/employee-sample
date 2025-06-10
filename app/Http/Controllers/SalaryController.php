@@ -12,15 +12,20 @@ class SalaryController extends Controller
      */
     public function index()
     {
-        return Salary::with('employee')->get();
-    }
+        $salaries = Salary::with('employee')->get()->map(function ($salary) {
+            return [
+                'emp_no' => $salary->emp_no,
+                'salary' => $salary->salary,
+                'from_date' => $salary->from_date,
+                'to_date' => $salary->to_date,
+                'employee' => [
+                    'first_name' => $salary->employee->first_name ?? null,
+                    'last_name' => $salary->employee->last_name ?? null,
+                ],
+            ];
+        });
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return response()->json($salaries);
     }
 
     /**
@@ -28,14 +33,16 @@ class SalaryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'emp_no' => 'required|exists:employees,emp_no',
             'salary' => 'required|integer',
             'from_date' => 'required|date',
-            'to_date' => 'required|date|after:from_date'
+            'to_date' => 'required|date|after:from_date',
         ]);
 
-        return Salary::create($request->all());
+        $salary = Salary::create($validated);
+
+        return response()->json($salary, 201);
     }
 
     /**
@@ -43,18 +50,21 @@ class SalaryController extends Controller
      */
     public function show($emp_no, $from_date)
     {
-        return Salary::where('emp_no', $emp_no)
+        $salary = Salary::where('emp_no', $emp_no)
             ->where('from_date', $from_date)
-            ->firstOrFail()
-            ->load('employee');
-    }
+            ->with('employee')
+            ->firstOrFail();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return response()->json([
+            'emp_no' => $salary->emp_no,
+            'salary' => $salary->salary,
+            'from_date' => $salary->from_date,
+            'to_date' => $salary->to_date,
+            'employee' => [
+                'first_name' => $salary->employee->first_name ?? null,
+                'last_name' => $salary->employee->last_name ?? null,
+            ],
+        ]);
     }
 
     /**
@@ -66,24 +76,24 @@ class SalaryController extends Controller
             ->where('from_date', $from_date)
             ->firstOrFail();
 
-        $request->validate([
+        $validated = $request->validate([
             'salary' => 'required|integer',
-            'to_date' => 'required|date|after:from_date'
+            'to_date' => 'required|date|after:from_date',
         ]);
 
-        $salary->update($request->all());
-        return $salary;
+        $salary->update($validated);
+
+        return response()->json($salary);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($emp_no, $from_date)
+    public function destroy(Salary $salary)
     {
-        $salary = Salary::where('emp_no', $emp_no)
-            ->where('from_date', $from_date)
-            ->firstOrFail();
         $salary->delete();
-        return response()->noContent();
+
+        return response()->json(['message' => 'Salary record deleted']);
     }
+
 }

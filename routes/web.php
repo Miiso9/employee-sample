@@ -1,12 +1,12 @@
 <?php
 
+use App\Http\Controllers\Auth\Socialite\ProviderCallbackController;
+use App\Http\Controllers\Auth\Socialite\ProviderRedirectController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DeptEmpController;
 use App\Http\Controllers\DeptManagerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\SalaryController;
-use App\Http\Controllers\Socialite\ProviderCallbackController;
-use App\Http\Controllers\Socialite\ProviderRedirectController;
 use App\Http\Controllers\TitleController;
 use Illuminate\Support\Facades\Route;
 

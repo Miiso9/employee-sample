@@ -12,9 +12,24 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = Employee::all();
-        return view('employees.index', compact('employees'));
+        $employees = Employee::all()->map(function ($employee) {
+            return [
+                'emp_no' => $employee->emp_no,
+                'first_name' => $employee->first_name,
+                'last_name' => $employee->last_name,
+                'birth_date' => $employee->birth_date,
+                'hire_date' => $employee->hire_date,
+                'gender' => $employee->gender,
+                'title' => null,
+                'salary' => null,
+                'department' => null,
+                'email' => null,
+            ];
+        });
+
+        return response()->json($employees);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -29,8 +44,7 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'emp_no' => 'required|integer|unique:employees',
+        $validated = $request->validate([
             'birth_date' => 'required|date',
             'first_name' => 'required|max:14',
             'last_name' => 'required|max:16',
@@ -38,16 +52,35 @@ class EmployeeController extends Controller
             'hire_date' => 'required|date',
         ]);
 
-        Employee::create($request->all());
-        return redirect()->route('employees.index')->with('success', 'Employee created!');
+        $lastEmpNo = Employee::max('emp_no') ?? 0;
+        $validated['emp_no'] = $lastEmpNo + 1;
+
+        $employee = Employee::create($validated);
+        return response()->json($employee, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Employee $employee)
+    public function show($emp_no)
     {
-        return view('employees.show', compact('employee'));
+        $employee = Employee::with([
+            'currentTitle',
+            'currentSalary',
+            'currentDepartment.department'
+        ])->findOrFail($emp_no);
+
+        return response()->json([
+            'emp_no' => $employee->emp_no,
+            'first_name' => $employee->first_name,
+            'last_name' => $employee->last_name,
+            'birth_date' => $employee->birth_date,
+            'hire_date' => $employee->hire_date,
+            'gender' => $employee->gender,
+            'title' => $employee->currentTitle->title ?? null,
+            'salary' => $employee->currentSalary->salary ?? null,
+            'department' => $employee->currentDepartment->department->dept_name ?? null,
+        ]);
     }
 
     /**
@@ -63,7 +96,7 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, Employee $employee)
     {
-        $request->validate([
+        $validated = $request->validate([
             'birth_date' => 'required|date',
             'first_name' => 'required|max:14',
             'last_name' => 'required|max:16',
@@ -71,8 +104,9 @@ class EmployeeController extends Controller
             'hire_date' => 'required|date',
         ]);
 
-        $employee->update($request->all());
-        return redirect()->route('employees.index')->with('success', 'Employee updated!');
+        $employee->update($validated);
+        return response()->json($employee);
+
     }
 
     /**
@@ -81,6 +115,6 @@ class EmployeeController extends Controller
     public function destroy(Employee $employee)
     {
         $employee->delete();
-        return redirect()->route('employees.index')->with('success', 'Employee deleted!');
+        return response()->json(['message' => 'Employees deleted']);
     }
 }

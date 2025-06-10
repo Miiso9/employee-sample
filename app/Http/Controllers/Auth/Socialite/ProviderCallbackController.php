@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Socialite;
-namespace App\Http\Controllers\Socialite;
+namespace App\Http\Controllers\Auth\Socialite;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;

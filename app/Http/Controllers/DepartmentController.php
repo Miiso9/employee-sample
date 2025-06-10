@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class DepartmentController extends Controller
 {
@@ -12,15 +13,14 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        return Department::all();
-    }
+        $departments = Department::all()->map(function ($department) {
+            return [
+                'dept_no' => $department->dept_no,
+                'dept_name' => $department->dept_name,
+            ];
+        });
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return response()->json($departments);
     }
 
     /**
@@ -28,49 +28,66 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'dept_no' => 'required|string|size:4|unique:departments',
-            'dept_name' => 'required|string|max:40|unique:departments'
+        $validated = $request->validate([
+            'dept_name' => 'required|string|max:40|unique:departments',
         ]);
 
-        return Department::create($request->all());
+        $validated['dept_no'] = $this->generateUniqueDeptNo();
+
+        $department = Department::create($validated);
+
+        return response()->json($department, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Department $department)
+    public function show($dept_no)
     {
-        return $department;
-    }
+        $department = Department::findOrFail($dept_no);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return response()->json([
+            'dept_no' => $department->dept_no,
+            'dept_name' => $department->dept_name,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Department $department)
+    public function update(Request $request, $dept_no)
     {
-        $request->validate([
-            'dept_name' => 'required|string|max:40|unique:departments,dept_name,'.$department->dept_no.',dept_no'
+        $department = Department::findOrFail($dept_no);
+
+        $validated = $request->validate([
+            'dept_name' => 'required|string|max:40|unique:departments,dept_name,' . $department->dept_no . ',dept_no',
         ]);
 
-        $department->update($request->all());
-        return $department;
+        $department->update($validated);
+
+        return response()->json($department);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Department $department)
+    public function destroy($dept_no)
     {
+        $department = Department::findOrFail($dept_no);
         $department->delete();
-        return response()->noContent();
+
+        return response()->json(['message' => 'Department deleted']);
+    }
+
+    /**
+     * Generate a unique 4-character department number.
+     */
+    private function generateUniqueDeptNo(): string
+    {
+        do {
+            $deptNo = strtoupper(Str::random(4));
+        } while (Department::where('dept_no', $deptNo)->exists());
+
+        return $deptNo;
     }
 }
