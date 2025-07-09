@@ -4,16 +4,18 @@ import Register from '../pages/Register';
 import EmployeesPage from '../pages/Employees/EmployeesPage.tsx';
 import EmployeeDetailPage from '../pages/Employees/EmployeeDetailPage.tsx';
 import DepartmentsPage from '../pages/Departments/DepartmentsPage.tsx';
+import DepartmentDetailPage from '../pages/Departments/DepartmentDetailPage.tsx';
+import DepartmentEditPage from '../pages/Departments/DepartmentEditPage.tsx';
 import SalariesPage from '../pages/Salaries/SalariesPage.tsx';
 import TitlesPage from '../pages/Titles/TitlesPage.tsx';
 import SocialLoginSuccess from '../pages/SocialLoginSuccess';
 import ProtectedRoute from './ProtectedRoute';
-import EmployeeEditPage from "../pages/Employees/EmployeeEditPage.tsx";
-import DepartmentEditPage from "../pages/Departments/DepartmentEditPage.tsx";
-import SalaryEditPage from "../pages/Salaries/SalaryEditPage.tsx";
-import SalaryDetailPage from "../pages/Salaries/SalaryDetailPage.tsx";
-import TitleDetailPage from "../pages/Titles/TitleDetailPage.tsx";
-import TitleEditPage from "../pages/Titles/TitleEditPage.tsx";
+import EmployeeEditPage from '../pages/Employees/EmployeeEditPage.tsx';
+import SalaryEditPage from '../pages/Salaries/SalaryEditPage.tsx';
+import SalaryDetailPage from '../pages/Salaries/SalaryDetailPage.tsx';
+import TitleDetailPage from '../pages/Titles/TitleDetailPage.tsx';
+import TitleEditPage from '../pages/Titles/TitleEditPage.tsx';
+
 export const routes: RouteObject[] = [
     {
         path: '/',
@@ -60,6 +62,14 @@ export const routes: RouteObject[] = [
         element: (
             <ProtectedRoute>
                 <DepartmentsPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/departments/:dept_no',
+        element: (
+            <ProtectedRoute>
+                <DepartmentDetailPage />
             </ProtectedRoute>
         ),
     },

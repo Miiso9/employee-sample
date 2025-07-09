@@ -1,0 +1,120 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Employee API",
+        "description": "API documentation for the Employee Management System",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/departments": {
+            "get": {
+                "tags": [
+                    "Departments"
+                ],
+                "summary": "Get list of departments",
+                "operationId": "da8820891dd6bf08713e9d77fbe6389f",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/api/dept-employees": {
+            "get": {
+                "tags": [
+                    "Department Employees"
+                ],
+                "summary": "Get list of department employees",
+                "operationId": "0ad3ba89c3722507c2ad63c72be1c32e",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/api/dept-managers": {
+            "get": {
+                "tags": [
+                    "Department Managers"
+                ],
+                "summary": "Get list of department managers",
+                "operationId": "c740a2f68f81b76af4bf903ffc5f688e",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/api/employees": {
+            "get": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "Get list of employees",
+                "operationId": "7fc06f144c1cd7925c5c391a6609f02d",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/api/salaries": {
+            "get": {
+                "tags": [
+                    "Salaries"
+                ],
+                "summary": "Get list of salaries",
+                "operationId": "8254518c7789094568601ec66f3cd24c",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/api/titles": {
+            "get": {
+                "tags": [
+                    "Titles"
+                ],
+                "summary": "Get list of titles",
+                "operationId": "35764398b53a19c6202b7a2df3b862cf",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Departments",
+            "description": "Departments"
+        },
+        {
+            "name": "Department Employees",
+            "description": "Department Employees"
+        },
+        {
+            "name": "Department Managers",
+            "description": "Department Managers"
+        },
+        {
+            "name": "Employees",
+            "description": "Employees"
+        },
+        {
+            "name": "Salaries",
+            "description": "Salaries"
+        },
+        {
+            "name": "Titles",
+            "description": "Titles"
+        }
+    ]
+}

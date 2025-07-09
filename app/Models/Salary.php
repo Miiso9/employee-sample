@@ -11,7 +11,7 @@ class   Salary extends Model
 
     public $incrementing = false;
     public $timestamps = false;
-
+    protected $primaryKey = ['emp_no', 'from_date'];
     protected $fillable = [
         'emp_no',
         'salary',

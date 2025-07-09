@@ -23,7 +23,12 @@ Route::middleware('auth:sanctum')->post('/refresh-token', [AuthenticationControl
 use App\Http\Controllers\EmployeeController;
 
 Route::middleware('auth:sanctum')->get('/employees', [EmployeeController::class, 'index']);
-Route::apiResource('employees', EmployeeController::class)->middleware('auth:sanctum');
+
+Route::get('employees', [EmployeeController::class, 'index'])->middleware('auth:sanctum');
+Route::post('employees', [EmployeeController::class, 'store'])->middleware('auth:sanctum');
+Route::get('employees/{employee}', [EmployeeController::class, 'show'])->middleware('auth:sanctum');
+Route::put('employees/{employee}', [EmployeeController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('employees/{employee}', [EmployeeController::class, 'destroy'])->middleware('auth:sanctum');
 
 Route::get('departments', [DepartmentController::class, 'index'])->middleware('auth:sanctum');
 Route::post('departments', [DepartmentController::class, 'store'])->middleware('auth:sanctum');
@@ -45,3 +50,9 @@ Route::put('/titles/{emp_no}', [TitleController::class, 'update']);
  Route::delete('/titles/{emp_no}', [TitleController::class, 'destroy']);
 
 
+use App\Http\Controllers\DeptEmpController;
+use App\Http\Controllers\DeptManagerController;
+
+Route::apiResource('departments', DepartmentController::class);
+Route::apiResource('dept_emp', DeptEmpController::class);
+Route::apiResource('dept_manager', DeptManagerController::class);

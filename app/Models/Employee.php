@@ -26,21 +26,21 @@ class Employee extends Model
     public function currentTitle(): HasOne
     {
         return $this->hasOne(Title::class, 'emp_no')
-            ->where('to_date', '9999-01-01')
+            ->where('to_date', '>=', now())
             ->latest('from_date');
     }
 
     public function currentSalary(): HasOne
     {
         return $this->hasOne(Salary::class, 'emp_no')
-            ->where('to_date', '9999-01-01')
-            ->latest('from_date');
+            ->whereDate('to_date', '>=', now()) // Active salaries
+            ->latest('from_date'); // Get most recent
     }
 
     public function currentDepartment(): HasOne
     {
         return $this->hasOne(DeptEmp::class, 'emp_no')
-            ->where('to_date', '9999-01-01')
+            ->where('to_date', '>=', now())
             ->with('department')
             ->latest('from_date');
     }

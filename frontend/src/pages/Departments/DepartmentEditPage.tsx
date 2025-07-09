@@ -4,6 +4,7 @@ import { MainLayout } from '../../components/MainLayout';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import axios from '../../lib/axios';
+import toast from 'react-hot-toast';
 
 interface Department {
     dept_no: string;
@@ -27,6 +28,7 @@ export default function DepartmentEditPage() {
                 setForm(response.data);
             } catch (error) {
                 console.error('Failed to fetch department:', error);
+                toast.error('Failed to load department');
             } finally {
                 setLoading(false);
             }
@@ -45,15 +47,17 @@ export default function DepartmentEditPage() {
 
         try {
             await axios.put(`/departments/${dept_no}`, form);
+            toast.success('Department updated successfully');
             navigate('/departments');
         } catch (error) {
             console.error('Update failed:', error);
+            toast.error('Failed to update department');
         } finally {
             setSaving(false);
         }
     };
 
-    if (loading) {
+    if (loading || !department) {
         return (
             <MainLayout>
                 <div className="flex justify-center items-center h-64 text-slate-500">
@@ -75,7 +79,7 @@ export default function DepartmentEditPage() {
                             Back to Departments
                         </Link>
                         <h1 className="text-2xl font-bold text-slate-800 mt-4">
-                            Edit Department: {department?.dept_name}
+                            Edit Department: {department.dept_name}
                         </h1>
                     </div>
                 </div>

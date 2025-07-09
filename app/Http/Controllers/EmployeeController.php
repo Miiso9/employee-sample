@@ -8,7 +8,15 @@ use Illuminate\Http\Request;
 class EmployeeController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/employees",
+     *     summary="Get list of employees",
+     *     tags={"Employees"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     )
+     * )
      */
     public function index()
     {
@@ -20,9 +28,9 @@ class EmployeeController extends Controller
                 'birth_date' => $employee->birth_date,
                 'hire_date' => $employee->hire_date,
                 'gender' => $employee->gender,
-                'title' => null,
-                'salary' => null,
-                'department' => null,
+                'title' => $employee->currentTitle->title ?? null,
+                'salary' => $employee->currentSalary->salary ?? null,
+                'department' => $employee->currentDepartment->department->dept_name ?? null,
                 'email' => null,
             ];
         });

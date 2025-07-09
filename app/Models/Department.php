@@ -9,12 +9,25 @@ class Department extends Model
 {
     use HasFactory;
 
+    protected $table = 'departments';
     protected $primaryKey = 'dept_no';
     public $incrementing = false;
-    protected $keyType = 'string';
+    public $timestamps = false;
 
     protected $fillable = [
         'dept_no',
-        'dept_name'
+        'dept_name',
     ];
+
+    // Relationship to get employees in this department
+    public function employees()
+    {
+        return $this->hasMany(DeptEmp::class, 'dept_no');
+    }
+
+    // Relationship to get managers of this department
+    public function managers()
+    {
+        return $this->hasMany(DeptManager::class, 'dept_no');
+    }
 }

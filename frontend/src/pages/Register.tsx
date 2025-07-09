@@ -127,7 +127,7 @@ export default function Register() {
                     }
                 />
 
-                <PasswordStrength password={password} />
+                <PasswordStrength password={password}/>
 
                 <div className="mt-8">
                     <Button type="submit" className="w-full">Create Account</Button>
@@ -139,22 +139,25 @@ export default function Register() {
                     href="http://localhost:8000/auth/google/redirect"
                     className="flex items-center justify-center p-3 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
                 >
-                    <img src="/google.svg" className="w-5 h-5 mr-2" alt="Google" />
+                    <img src="/google.svg" className="w-5 h-5 mr-2" alt="Google"/>
                     <span className="text-slate-700 text-sm">Google</span>
                 </a>
 
                 <button
                     className="flex items-center justify-center p-3 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
                 >
-                    <img src="/facebook.svg" className="w-5 h-5 mr-2" alt="Facebook" />
+                    <img src="/facebook.svg" className="w-5 h-5 mr-2" alt="Facebook"/>
                     <span className="text-slate-700 text-sm">Facebook</span>
                 </button>
             </div>
-
+            <a href="/login" className="text-blue-500 hover:text-blue-600">
+                Have account already?
+            </a>
             <div className="mt-8 pt-8 border-t border-slate-100">
+
                 <p className="text-sm text-slate-500 text-center">
                     By creating an account, you agree to our
-                    <br />
+                    <br/>
                     <a href="#" className="text-blue-500 hover:text-blue-600">
                         Terms of Service
                     </a>{' '}

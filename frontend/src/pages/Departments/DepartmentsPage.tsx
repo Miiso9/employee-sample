@@ -66,6 +66,8 @@ export default function DepartmentsPage() {
 
                 {loading ? (
                     <div className="text-center py-10 text-slate-500">Loading departments...</div>
+                ) : departments.length === 0 ? (
+                    <div className="text-center py-10 text-slate-500">No departments found.</div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {departments.map((dept) => (

@@ -8,7 +8,15 @@ use Illuminate\Http\Request;
 class DeptManagerController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/dept-managers",
+     *     summary="Get list of department managers",
+     *     tags={"Department Managers"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     )
+     * )
      */
     public function index()
     {

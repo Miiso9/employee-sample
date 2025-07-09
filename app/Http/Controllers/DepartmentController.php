@@ -9,7 +9,15 @@ use Illuminate\Support\Str;
 class DepartmentController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/departments",
+     *     summary="Get list of departments",
+     *     tags={"Departments"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     )
+     * )
      */
     public function index()
     {
@@ -44,11 +52,32 @@ class DepartmentController extends Controller
      */
     public function show($dept_no)
     {
-        $department = Department::findOrFail($dept_no);
+        $department = Department::with([
+            'employees.employee', // Load employees through DeptEmp
+            'managers.employee'   // Load managers through DeptManager
+        ])->findOrFail($dept_no);
 
         return response()->json([
             'dept_no' => $department->dept_no,
             'dept_name' => $department->dept_name,
+            'employees' => $department->employees->map(function ($deptEmp) {
+                return [
+                    'emp_no' => $deptEmp->employee->emp_no,
+                    'first_name' => $deptEmp->employee->first_name,
+                    'last_name' => $deptEmp->employee->last_name,
+                    'from_date' => $deptEmp->from_date,
+                    'to_date' => $deptEmp->to_date,
+                ];
+            }),
+            'managers' => $department->managers->map(function ($deptManager) {
+                return [
+                    'emp_no' => $deptManager->employee->emp_no,
+                    'first_name' => $deptManager->employee->first_name,
+                    'last_name' => $deptManager->employee->last_name,
+                    'from_date' => $deptManager->from_date,
+                    'to_date' => $deptManager->to_date,
+                ];
+            }),
         ]);
     }
 

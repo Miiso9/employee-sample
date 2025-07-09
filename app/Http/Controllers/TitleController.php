@@ -8,7 +8,15 @@ use Illuminate\Http\Request;
 class TitleController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/titles",
+     *     summary="Get list of titles",
+     *     tags={"Titles"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     )
+     * )
      */
     public function index()
     {

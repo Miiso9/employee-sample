@@ -8,7 +8,15 @@ use Illuminate\Http\Request;
 class SalaryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/salaries",
+     *     summary="Get list of salaries",
+     *     tags={"Salaries"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     )
+     * )
      */
     public function index()
     {
